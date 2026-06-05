@@ -1,0 +1,185 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* ============================================
+   OS DESIGN TOKENS
+   ============================================ */
+:root {
+  --os-font: 'Inter', system-ui, -apple-system, sans-serif;
+
+  /* Glass */
+  --glass-bg: rgba(255, 255, 255, 0.12);
+  --glass-border: rgba(255, 255, 255, 0.22);
+  --glass-shadow: 0 8px 40px 0 rgba(0, 0, 0, 0.35);
+
+  --glass-bg-dark: rgba(20, 20, 30, 0.65);
+  --glass-border-dark: rgba(255, 255, 255, 0.1);
+  --glass-shadow-dark: 0 8px 40px 0 rgba(0, 0, 0, 0.6);
+
+  /* Taskbar */
+  --taskbar-bg: rgba(15, 12, 41, 0.82);
+  --taskbar-border: rgba(255, 255, 255, 0.08);
+
+  /* Text */
+  --text-dark: #1f1f1f;
+  --text-light: #ffffff;
+  --text-muted: rgba(255, 255, 255, 0.6);
+
+  /* Accent */
+  --accent-color: #0078d4;
+  --accent-hover: #106ebe;
+  --accent-glow: rgba(0, 120, 212, 0.4);
+
+  /* Window */
+  --window-bg: rgba(245, 245, 250, 0.88);
+  --window-titlebar: rgba(235, 235, 245, 0.9);
+
+  /* Wallpaper animation */
+  --wallpaper-gradient: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+  --wallpaper-gradient-2: linear-gradient(135deg, #302b63 0%, #24243e 50%, #0f0c29 100%);
+  --wallpaper-gradient-3: linear-gradient(135deg, #24243e 0%, #0f0c29 50%, #302b63 100%);
+}
+
+/* ============================================
+   RESET
+   ============================================ */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--os-font);
+  overflow: hidden;
+  user-select: none;
+  color: var(--text-dark);
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  height: 100%;
+  width: 100%;
+}
+
+#root {
+  height: 100%;
+  width: 100%;
+  display: block;
+}
+
+/* ============================================
+   WALLPAPER THEMES (animated via keyframes)
+   ============================================ */
+@keyframes gradientShift {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* ============================================
+   GLASS PANELS
+   ============================================ */
+.glass-panel {
+  background: var(--glass-bg);
+  backdrop-filter: blur(28px) saturate(180%);
+  -webkit-backdrop-filter: blur(28px) saturate(180%);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+}
+
+.glass-panel-dark {
+  background: var(--glass-bg-dark);
+  backdrop-filter: blur(28px) saturate(180%);
+  -webkit-backdrop-filter: blur(28px) saturate(180%);
+  border: 1px solid var(--glass-border-dark);
+  box-shadow: var(--glass-shadow-dark);
+  color: var(--text-light);
+}
+
+/* ============================================
+   SCROLLBAR
+   ============================================ */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.35); }
+
+/* ============================================
+   NOTIFICATION TOASTS
+   ============================================ */
+.notifications-container {
+  position: fixed;
+  bottom: 60px;
+  right: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 9999;
+  pointer-events: none;
+}
+
+.notification-toast {
+  background: rgba(30, 30, 50, 0.92);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 10px;
+  padding: 12px 16px;
+  color: white;
+  font-size: 13px;
+  min-width: 240px;
+  max-width: 320px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.4);
+  pointer-events: all;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.notification-toast .notif-icon {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent-color);
+  margin-top: 4px;
+  flex-shrink: 0;
+}
+
+/* ============================================
+   SHUTDOWN OVERLAY
+   ============================================ */
+.shutdown-overlay {
+  position: fixed;
+  inset: 0;
+  background: #000;
+  z-index: 99999;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 32px;
+}
+
+.shutdown-logo {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5px;
+  width: 60px;
+  height: 60px;
+}
+.shutdown-tile { border-radius: 2px; opacity: 0.8; }
+.shutdown-tile-1 { background: #00adef; }
+.shutdown-tile-2 { background: #00b14f; }
+.shutdown-tile-3 { background: #f25022; }
+.shutdown-tile-4 { background: #febb08; }
+
+.shutdown-text {
+  color: rgba(255,255,255,0.7);
+  font-size: 14px;
+  font-family: var(--os-font);
+}

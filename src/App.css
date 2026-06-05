@@ -1,0 +1,26 @@
+.desktop {
+  width: calc(100% / var(--os-scale, 1));
+  height: calc(100% / var(--os-scale, 1));
+  transform: scale(var(--os-scale, 1));
+  transform-origin: top left;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.desktop-icons {
+  flex: 1;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  gap: 8px;
+  min-height: 0; /* important for flex column wrap to calculate properly */
+  pointer-events: none; /* allow clicks to pass through to desktop */
+}
+
+.desktop-icons > * {
+  pointer-events: all;
+}

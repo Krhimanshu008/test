@@ -1,0 +1,79 @@
+.terminal-app-container {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.terminal-app {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: #1e1e1e;
+  font-family: 'Cascadia Code', 'Consolas', 'Courier New', monospace;
+  color: #d4d4d4;
+  padding: 12px;
+  overflow: hidden;
+  height: 100%;
+}
+
+.terminal-output {
+  flex: 1;
+  overflow-y: auto;
+  margin-bottom: 8px;
+  padding-right: 8px;
+}
+
+/* Custom scrollbar for terminal */
+.terminal-output::-webkit-scrollbar {
+  width: 8px;
+}
+.terminal-output::-webkit-scrollbar-track {
+  background: transparent;
+}
+.terminal-output::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+}
+
+.term-line {
+  margin-bottom: 4px;
+  line-height: 1.5;
+  font-size: 13px;
+  word-break: break-all;
+  white-space: pre-wrap;
+}
+
+.term-line pre {
+  margin: 0;
+  font-family: inherit;
+}
+
+.term-input {
+  color: #4ec9b0;
+}
+
+.terminal-input-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.term-prompt {
+  color: #569cd6;
+  font-weight: 500;
+  font-size: 13px;
+  white-space: pre;
+}
+
+.terminal-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #d4d4d4;
+  font-family: inherit;
+  font-size: 13px;
+  padding: 0;
+  caret-color: #d4d4d4;
+}
