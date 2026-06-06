@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { motion } from 'framer-motion';
+import { motion, useAnimation } from 'framer-motion';
 import { Trash2, Edit2, Play } from 'lucide-react';
 import useOsStore, { GRID_CONFIGS } from '../../store/osStore';
 import './DesktopIcon.css';
@@ -62,6 +62,12 @@ const DesktopIcon = ({ app, onDoubleClick }) => {
   const x = config.padding + position.col * config.cellWidth;
   const y = config.padding + position.row * config.cellHeight;
 
+  const controls = useAnimation();
+
+  useEffect(() => {
+    controls.start({ x, y });
+  }, [x, y, controls]);
+
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (menuRef.current && !menuRef.current.contains(e.target)) {
@@ -78,7 +84,7 @@ const DesktopIcon = ({ app, onDoubleClick }) => {
     <motion.div 
       drag
       dragMomentum={false}
-      animate={{ x, y }}
+      animate={controls}
       onDragStart={() => setDraggingIconId(app.id)}
       onDragEnd={(e, info) => {
         setDraggingIconId(null);
@@ -112,8 +118,10 @@ const DesktopIcon = ({ app, onDoubleClick }) => {
           // Swap places with the existing icon
           updatePosition(collisionId, position.col, position.row);
           updatePosition(app.id, finalCol, finalRow);
+          controls.start({ x: snapX, y: snapY });
         } else {
           updatePosition(app.id, finalCol, finalRow);
+          controls.start({ x: snapX, y: snapY });
         }
       }}
       transition={{ type: "spring", stiffness: 300, damping: 30 }}
