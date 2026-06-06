@@ -1,6 +1,7 @@
 .boot-screen {
-  width: 100vw;
-  height: 100vh;
+  position: absolute;
+  inset: 0;
+  z-index: 999999;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -8,7 +9,6 @@
   background-size: cover;
   background-position: center;
   cursor: pointer;
-  position: relative;
   overflow: hidden;
 }
 

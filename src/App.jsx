@@ -8,18 +8,17 @@ import ContextMenu from './components/ContextMenu/ContextMenu';
 import Wallpaper from './components/Desktop/Wallpaper';
 import { useState } from 'react';
 
-import useOsStore from './store/osStore';
+import useOsStore, { GRID_CONFIGS } from './store/osStore';
 import './App.css';
 
-import { APP_REGISTRY } from './apps/registry';
-
-// Desktop icons (subset shown on desktop)
-const DESKTOP_APPS = ['about', 'projects', 'code', 'terminal', 'explorer', 'notepad',
-                       'browser', 'resume', 'chess', 'sudoku', 'settings'];
+import { APP_REGISTRY, DESKTOP_APPS } from './apps/registry';
+import { Folder, FileText } from 'lucide-react';
 
 function App() {
   const [isBooted, setIsBooted] = useState(false);
   const [contextMenu, setContextMenu] = useState(null);
+  const [gridDim, setGridDim] = useState({ cols: 0, rows: 0 });
+  const [selectionBox, setSelectionBox] = useState(null);
 
   const openWindows  = useOsStore(s => s.openWindows);
   const focusedWindowId = useOsStore(s => s.focusedWindowId);
@@ -32,6 +31,64 @@ function App() {
   const isShuttingDown = useOsStore(s => s.isShuttingDown);
   const wallpaperTheme = useOsStore(s => s.wallpaperTheme);
   const osScale = useOsStore(s => s.osScale);
+  const draggingIconId = useOsStore(s => s.draggingIconId);
+  const iconSize = useOsStore(s => s.iconSize || 'medium');
+  const virtualFS = useOsStore(s => s.virtualFS);
+  const addAuditLog = useOsStore(s => s.addAuditLog);
+  const clearIconSelection = useOsStore(s => s.clearIconSelection);
+  const setSelectedIcons = useOsStore(s => s.setSelectedIcons);
+
+  const getDesktopVFSItems = useCallback(() => {
+    const items = [];
+    const seen = new Set();
+    Object.keys(virtualFS).forEach(path => {
+      if (!path.startsWith('/Desktop/')) return;
+      const rel = path.slice('/Desktop/'.length);
+      const parts = rel.split('/');
+      if (parts[0] === '.keep') return;
+      
+      if (parts.length === 1) {
+        items.push({
+          id: `vfs-${path}`,
+          title: parts[0],
+          icon: <FileText size={32} color="#ffffff" />,
+          isVFS: true,
+          path: path,
+          isDir: false
+        });
+      } else {
+        if (!seen.has(parts[0])) {
+          seen.add(parts[0]);
+          items.push({
+            id: `vfs-/Desktop/${parts[0]}`,
+            title: parts[0],
+            icon: <Folder size={32} color="#F8D775" fill="#F8D775" />,
+            isVFS: true,
+            path: `/Desktop/${parts[0]}`,
+            isDir: true
+          });
+        }
+      }
+    });
+    return items;
+  }, [virtualFS]);
+
+  const allDesktopItems = [
+    ...APP_REGISTRY.filter(a => DESKTOP_APPS.includes(a.id)),
+    ...getDesktopVFSItems()
+  ];
+
+  useEffect(() => {
+    const config = GRID_CONFIGS[iconSize];
+    const updateGrid = () => {
+      const maxRows = Math.max(1, Math.floor((window.innerHeight - 80) / config.cellHeight));
+      const maxCols = Math.max(1, Math.floor((window.innerWidth - config.padding) / config.cellWidth));
+      setGridDim({ cols: maxCols, rows: maxRows });
+    };
+    updateGrid();
+    window.addEventListener('resize', updateGrid);
+    return () => window.removeEventListener('resize', updateGrid);
+  }, [iconSize]);
 
   useEffect(() => {
     // Only set CSS variable for scale. Let CSS handle the math.
@@ -40,8 +97,13 @@ function App() {
     document.documentElement.style.zoom = ''; // Clear buggy zoom
   }, [osScale]);
 
-  // Input trapping after boot
+  // Initial setup and input trapping
   useEffect(() => {
+    // Initial arrange icons if not set
+    if (Object.keys(useOsStore.getState().iconPositions).length === 0) {
+      useOsStore.getState().arrangeIcons(allDesktopItems.map(a => a.id));
+    }
+
     if (!isBooted) return;
     const handleContextMenu = (e) => e.preventDefault();
     const handleKeyDown = (e) => {
@@ -54,11 +116,32 @@ function App() {
     };
     document.addEventListener('contextmenu', handleContextMenu);
     document.addEventListener('keydown', handleKeyDown);
+
     return () => {
       document.removeEventListener('contextmenu', handleContextMenu);
       document.removeEventListener('keydown', handleKeyDown);
     };
   }, [isBooted]);
+
+  // Handle auto-close on shutdown
+  useEffect(() => {
+    if (isShuttingDown) {
+      const timer = setTimeout(() => {
+        // Attempt to close the browser tab.
+        // Note: Browsers usually block this unless the tab was opened by a script.
+        try {
+          window.close();
+        } catch (e) {
+          console.log("Browser prevented window.close()");
+        }
+        
+        // Fallback: Complete black screen (monitor off)
+        document.body.innerHTML = '';
+        document.body.style.backgroundColor = 'black';
+      }, 2500); // Wait 2.5 seconds for the shutdown animation to play out
+      return () => clearTimeout(timer);
+    }
+  }, [isShuttingDown]);
 
   const openApp = useCallback((id) => {
     const def = APP_REGISTRY.find(a => a.id === id);
@@ -69,31 +152,114 @@ function App() {
     setContextMenu({ x: e.clientX, y: e.clientY });
   };
 
-  const handleDesktopClick = () => {
-    setContextMenu(null);
+  const handleBootComplete = () => {
+    setIsBooted(true);
+    addAuditLog('SYSTEM_BOOT', 'Browser OS successfully booted');
   };
 
-  if (!isBooted) {
-    return <BootScreen onBoot={() => setIsBooted(true)} />;
-  }
+  const handleDesktopMouseDown = (e) => {
+    if (e.target.closest('.desktop-icon') || e.target.closest('.window') || e.target.closest('.taskbar')) {
+      return;
+    }
+    clearIconSelection();
+    setContextMenu(null);
+    setSelectionBox({ startX: e.clientX, startY: e.clientY, endX: e.clientX, endY: e.clientY });
+  };
+
+  const handleDesktopMouseMove = (e) => {
+    if (selectionBox) {
+      setSelectionBox(prev => ({ ...prev, endX: e.clientX, endY: e.clientY }));
+    }
+  };
+
+  const handleDesktopMouseUp = (e) => {
+    if (selectionBox) {
+      const boxRect = {
+        left: Math.min(selectionBox.startX, selectionBox.endX),
+        top: Math.min(selectionBox.startY, selectionBox.endY),
+        right: Math.max(selectionBox.startX, selectionBox.endX),
+        bottom: Math.max(selectionBox.startY, selectionBox.endY)
+      };
+
+      const selected = [];
+      const positions = useOsStore.getState().iconPositions;
+      const config = GRID_CONFIGS[iconSize];
+      
+      allDesktopItems.forEach(app => {
+         const pos = positions[app.id] || { col: 0, row: 0 };
+         const iconLeft = config.padding + pos.col * config.cellWidth;
+         const iconTop = config.padding + pos.row * config.cellHeight;
+         const iconRight = iconLeft + config.cellWidth;
+         const iconBottom = iconTop + config.cellHeight;
+         
+         const overlap = !(iconRight < boxRect.left || 
+                           iconLeft > boxRect.right || 
+                           iconBottom < boxRect.top || 
+                           iconTop > boxRect.bottom);
+         if (overlap) {
+            selected.push(app.id);
+         }
+      });
+      
+      if (selected.length > 0) {
+        setSelectedIcons(selected);
+      }
+      setSelectionBox(null);
+    }
+  };
 
   return (
     <div
       className="desktop"
-      onClick={handleDesktopClick}
+      onMouseDown={handleDesktopMouseDown}
+      onMouseMove={handleDesktopMouseMove}
+      onMouseUp={handleDesktopMouseUp}
+      onMouseLeave={handleDesktopMouseUp}
       onContextMenu={handleDesktopRightClick}
     >
+      {/* Boot Screen Overlay */}
+      <AnimatePresence>
+        {!isBooted && (
+          <BootScreen onBoot={handleBootComplete} />
+        )}
+      </AnimatePresence>
+
       <Wallpaper />
-      {/* Desktop icons */}
+
       <div className="desktop-icons">
-        {APP_REGISTRY.filter(a => DESKTOP_APPS.includes(a.id)).map(app => (
+        {allDesktopItems.map(app => (
           <DesktopIcon
             key={app.id}
             app={app}
-            onDoubleClick={() => openApp(app.id)}
+            onDoubleClick={() => {
+              if (app.isVFS) {
+                if (app.isDir) {
+                  const explorer = APP_REGISTRY.find(a => a.id === 'explorer');
+                  if (explorer) openWindow(explorer, { initialPath: app.path });
+                } else {
+                  const notepad = APP_REGISTRY.find(a => a.id === 'notepad');
+                  if (notepad) openWindow(notepad, { initialPath: app.path, initialContent: virtualFS[app.path] });
+                }
+              } else {
+                openApp(app.id);
+              }
+            }}
           />
         ))}
       </div>
+
+      {/* Selection Box */}
+      {selectionBox && (
+        <div
+          className="desktop-selection-box"
+          style={{
+            left: Math.min(selectionBox.startX, selectionBox.endX),
+            top: Math.min(selectionBox.startY, selectionBox.endY),
+            width: Math.abs(selectionBox.endX - selectionBox.startX),
+            height: Math.abs(selectionBox.endY - selectionBox.startY)
+          }}
+        />
+      )}
 
       {/* Open windows */}
       {openWindows.map(win => (
@@ -126,6 +292,7 @@ function App() {
           y={contextMenu.y}
           onClose={() => setContextMenu(null)}
           onOpenApp={openApp}
+          desktopItemIds={allDesktopItems.map(a => a.id)}
         />
       )}
 

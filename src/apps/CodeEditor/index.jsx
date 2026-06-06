@@ -57,6 +57,7 @@ const CodeEditorApp = () => {
   const iframeRef = useRef(null);
   const outputRef = useRef(null);
   const addNotification = useOsStore(s => s.addNotification);
+  const addAuditLog = useOsStore(s => s.addAuditLog);
 
   const switchLang = (l) => {
     setLang(l);
@@ -73,6 +74,7 @@ const CodeEditorApp = () => {
     const isPreview = lang.id === 'html' || lang.id === 'css';
     if (isPreview) setActivePanel('preview');
     else setActivePanel('output');
+    addAuditLog('CODE_RUN', `Executed ${lang.label} code`);
 
     try {
       if (lang.id === 'python') {

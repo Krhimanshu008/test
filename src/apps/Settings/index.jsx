@@ -30,6 +30,8 @@ const SettingsApp = () => {
   const setOsScale = useOsStore(s => s.setOsScale);
   const interactiveWallpaper = useOsStore(s => s.interactiveWallpaper);
   const setInteractiveWallpaper = useOsStore(s => s.setInteractiveWallpaper);
+  const iconSize = useOsStore(s => s.iconSize || 'medium');
+  const setIconSize = useOsStore(s => s.setIconSize);
 
   const applyTheme = (key) => {
     setWallpaperTheme(key);
@@ -137,6 +139,35 @@ const SettingsApp = () => {
             >
               Reset to 100%
             </button>
+          </div>
+        </Section>
+
+        <Section icon={Monitor} title="Desktop Icons Size">
+          <p className="settings-desc">Adjust the dimensions and container grid of your desktop icons.</p>
+          <div className="icon-size-settings" style={{ display: 'flex', gap: '12px', marginTop: '8px' }}>
+            {['small', 'medium', 'large'].map(size => (
+              <button
+                key={size}
+                className={`scale-reset-btn ${iconSize === size ? 'active' : ''}`}
+                style={{
+                  padding: '8px 16px',
+                  borderRadius: '6px',
+                  background: iconSize === size ? 'var(--accent-color, #0078d4)' : 'rgba(255,255,255,0.06)',
+                  color: iconSize === size ? '#fff' : 'rgba(255,255,255,0.85)',
+                  border: '1px solid rgba(255,255,255,0.1)',
+                  cursor: 'pointer',
+                  textTransform: 'capitalize',
+                  fontWeight: 500,
+                  transition: 'background 0.15s, color 0.15s'
+                }}
+                onClick={() => {
+                  setIconSize(size);
+                  addNotification(`Desktop icons set to ${size} size`);
+                }}
+              >
+                {size}
+              </button>
+            ))}
           </div>
         </Section>
 

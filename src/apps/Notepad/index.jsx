@@ -7,6 +7,7 @@ const NotepadApp = ({ initialPath, initialContent }) => {
   const virtualFS = useOsStore(s => s.virtualFS);
   const writeFile = useOsStore(s => s.writeFile);
   const addNotification = useOsStore(s => s.addNotification);
+  const addAuditLog = useOsStore(s => s.addAuditLog);
 
   const [filename, setFilename] = useState(initialPath?.split('/').pop() || 'untitled.txt');
   const [content, setContent] = useState(initialContent ?? virtualFS[initialPath] ?? '');
@@ -20,6 +21,7 @@ const NotepadApp = ({ initialPath, initialContent }) => {
   const save = () => {
     const path = '/home/user/' + filename;
     writeFile(path, content);
+    addAuditLog('NOTEPAD_SAVE', `Saved file ${path}`);
     setSaved(true);
     addNotification(`Saved: ${filename}`);
   };

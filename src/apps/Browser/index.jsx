@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { ChevronLeft, ChevronRight, RotateCcw, X, Star, Globe } from 'lucide-react';
+import useOsStore from '../../store/osStore';
 import './style.css';
 
 const BOOKMARKS = [
@@ -17,6 +18,7 @@ const BrowserApp = () => {
   const [histIdx, setHistIdx] = useState(-1);
   const [error, setError] = useState('');
   const iframeRef = useRef(null);
+  const addAuditLog = useOsStore(s => s.addAuditLog);
 
   const navigate = (target) => {
     let finalUrl = target.trim();
@@ -27,6 +29,7 @@ const BrowserApp = () => {
     setError('');
     setUrl(finalUrl);
     setInputUrl(finalUrl);
+    addAuditLog('BROWSER_NAVIGATE', `Navigated to ${finalUrl}`);
     const newHist = [...history.slice(0, histIdx + 1), finalUrl];
     setHistory(newHist);
     setHistIdx(newHist.length - 1);

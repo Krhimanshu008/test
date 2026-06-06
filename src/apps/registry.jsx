@@ -12,6 +12,7 @@ import { config as MediaPlayerConfig } from './MediaPlayer/config';
 import { config as ChessConfig } from './Chess/config';
 import { config as SudokuConfig } from './Sudoku/config';
 import { config as SettingsConfig } from './Settings/config';
+import { config as SystemMonitorConfig } from './SystemMonitor/config';
 
 export const APP_REGISTRY = [
   AboutMeConfig,
@@ -27,4 +28,7 @@ export const APP_REGISTRY = [
   ChessConfig,
   SudokuConfig,
   SettingsConfig,
+  SystemMonitorConfig,
 ];
+
+export const DESKTOP_APPS = ['about', 'code', 'terminal', 'explorer', 'notepad', 'browser', 'resume', 'chess', 'sudoku', 'settings', 'sysmonitor'];

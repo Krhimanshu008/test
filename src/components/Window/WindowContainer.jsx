@@ -9,6 +9,7 @@ const WindowContainer = ({ app, isFocused, isMinimized, onFocus, onClose, onMini
   const [isMaximized, setIsMaximized] = useState(false);
   const rndRef = useRef(null);
   const osScale = useOsStore(s => s.osScale);
+  const isTaskbarLocked = useOsStore(s => s.isTaskbarLocked);
 
   const initialWidth = Math.min(860, window.innerWidth * 0.85);
   const initialHeight = Math.min(620, window.innerHeight * 0.85);
@@ -28,7 +29,8 @@ const WindowContainer = ({ app, isFocused, isMinimized, onFocus, onClose, onMini
       prevPosRef.current = { ...currentPosRef.current };
       // Take scale into account for maximization
       const scaleFactor = osScale / 100;
-      rndRef.current.updateSize({ width: window.innerWidth / scaleFactor, height: (window.innerHeight - 48) / scaleFactor });
+      const taskbarOffset = isTaskbarLocked ? 48 : 0;
+      rndRef.current.updateSize({ width: window.innerWidth / scaleFactor, height: (window.innerHeight - taskbarOffset) / scaleFactor });
       rndRef.current.updatePosition({ x: 0, y: 0 });
     } else {
       rndRef.current.updateSize({ width: prevPosRef.current.width, height: prevPosRef.current.height });
@@ -36,6 +38,28 @@ const WindowContainer = ({ app, isFocused, isMinimized, onFocus, onClose, onMini
     }
     setIsMaximized(!isMaximized);
   };
+
+  React.useEffect(() => {
+    if (isMaximized && rndRef.current) {
+      const scaleFactor = osScale / 100;
+      const taskbarOffset = isTaskbarLocked ? 48 : 0;
+      rndRef.current.updateSize({ width: window.innerWidth / scaleFactor, height: (window.innerHeight - taskbarOffset) / scaleFactor });
+      rndRef.current.updatePosition({ x: 0, y: 0 });
+    }
+  }, [isTaskbarLocked, isMaximized, osScale]);
+
+  React.useEffect(() => {
+    const handleResize = () => {
+      if (isMaximized && rndRef.current) {
+        const scaleFactor = osScale / 100;
+        const taskbarOffset = isTaskbarLocked ? 48 : 0;
+        rndRef.current.updateSize({ width: window.innerWidth / scaleFactor, height: (window.innerHeight - taskbarOffset) / scaleFactor });
+      }
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [isMaximized, isTaskbarLocked, osScale]);
+
 
   return (
     <AnimatePresence>

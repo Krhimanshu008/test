@@ -46,10 +46,12 @@ const BootScreen = ({ onBoot }) => {
   };
 
   return (
-    <div 
+    <motion.div 
       className="boot-screen" 
       onClick={handleBoot}
       style={{ backgroundImage: `url(${BOOT_WALLPAPER_URL})` }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 1.5, ease: "easeInOut" }}
     >
       <div className="boot-overlay" />
 
@@ -84,7 +86,7 @@ const BootScreen = ({ onBoot }) => {
           />
         </div>
       </motion.div>
-    </div>
+    </motion.div>
   );
 };
 

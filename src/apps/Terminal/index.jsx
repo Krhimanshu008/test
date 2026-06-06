@@ -10,13 +10,18 @@ Browser OS Terminal v1.0
 Commands:
   help          Show this help
   ls [path]     List directory contents
+  cd <dir>      Change directory
+  pwd           Print working directory
   cat <file>    Read a file
   echo <text>   Print text
   clear         Clear terminal
-  pwd           Print working directory
-  mkdir <name>  Create directory (in-memory)
+  mkdir <name>  Create directory
+  rmdir <name>  Remove empty directory
   touch <file>  Create empty file
   rm <file>     Delete a file
+  cp <s> <d>    Copy file
+  mv <s> <d>    Move file
+  history       Show command history
   python        Launch Python REPL (type exit() to quit)
   date          Show current date/time
   whoami        Show current user
@@ -88,13 +93,16 @@ const TerminalApp = () => {
   const [pythonMode, setPythonMode] = useState(false);
   const [pyBuffer, setPyBuffer] = useState('');
   const inputRef = useRef(null);
-  const bottomRef = useRef(null);
+  const outputRef = useRef(null);
   const virtualFS = useOsStore(s => s.virtualFS);
   const writeFile = useOsStore(s => s.writeFile);
   const deleteFile = useOsStore(s => s.deleteFile);
+  const addAuditLog = useOsStore(s => s.addAuditLog);
 
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+    if (outputRef.current) {
+      outputRef.current.scrollTop = outputRef.current.scrollHeight;
+    }
   }, [lines]);
 
   useEffect(() => {
@@ -114,6 +122,7 @@ const TerminalApp = () => {
   const executeCommand = async (raw) => {
     const trimmed = raw.trim();
     if (!trimmed) return;
+    addAuditLog('TERMINAL_CMD', trimmed);
 
     // Python REPL mode
     if (pythonMode) {
@@ -188,13 +197,49 @@ const TerminalApp = () => {
       }
 
       case 'cd': {
+        if (!arg) { setCwd('/home/user'); break; }
         const target = resolvePath(arg);
         setCwd(target);
         break;
       }
 
       case 'mkdir': {
-        addLine(`Directory created (in-memory): ${resolvePath(arg)}`);
+        if (!arg) { addLine('Usage: mkdir <dir>'); break; }
+        const target = resolvePath(arg);
+        writeFile(target + '/.keep', '');
+        break;
+      }
+
+      case 'rmdir': {
+        if (!arg) { addLine('Usage: rmdir <dir>'); break; }
+        const target = resolvePath(arg);
+        const entries = Object.keys(virtualFS).filter(k => k.startsWith(target + '/') && k !== target + '/.keep');
+        if (entries.length > 0) { addLine(`rmdir: failed to remove '${arg}': Directory not empty`); break; }
+        deleteFile(target + '/.keep');
+        break;
+      }
+
+      case 'cp': {
+        if (args.length < 2) { addLine('Usage: cp <src> <dst>'); break; }
+        const src = resolvePath(args[0]);
+        const dst = resolvePath(args[1]);
+        if (virtualFS[src] === undefined) { addLine(`cp: cannot stat '${args[0]}': No such file`); break; }
+        writeFile(dst, virtualFS[src]);
+        break;
+      }
+
+      case 'mv': {
+        if (args.length < 2) { addLine('Usage: mv <src> <dst>'); break; }
+        const src = resolvePath(args[0]);
+        const dst = resolvePath(args[1]);
+        if (virtualFS[src] === undefined) { addLine(`mv: cannot stat '${args[0]}': No such file`); break; }
+        writeFile(dst, virtualFS[src]);
+        deleteFile(src);
+        break;
+      }
+
+      case 'history': {
+        history.slice().reverse().forEach((h, i) => addLine(`  ${i + 1}  ${h}`));
         break;
       }
 
@@ -241,13 +286,12 @@ const TerminalApp = () => {
   return (
     <div className="terminal-app-container" onClick={() => inputRef.current?.focus()}>
       <div className="terminal-app">
-        <div className="terminal-output">
+        <div className="terminal-output" ref={outputRef}>
           {lines.map((line, i) => (
             <div key={i} className={`term-line term-${line.type}`}>
               <pre>{line.text}</pre>
             </div>
           ))}
-          <div ref={bottomRef} />
         </div>
         <div className="terminal-input-row">
           <span className="term-prompt">
