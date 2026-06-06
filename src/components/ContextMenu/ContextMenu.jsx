@@ -44,7 +44,15 @@ const ContextMenu = ({ x, y, onClose, onOpenApp, desktopItemIds }) => {
       clearTimeout(timeoutRef.current);
       timeoutRef.current = null;
     }
-    setActiveSubmenu(submenuId);
+    if (submenuId) {
+      setActiveSubmenu(submenuId);
+    } else {
+      // When hovering a non-submenu item, wait a bit before closing the active submenu.
+      // This allows diagonal mouse movement across other items.
+      timeoutRef.current = setTimeout(() => {
+        setActiveSubmenu(null);
+      }, 350);
+    }
   };
 
   const handleMouseLeave = () => {
@@ -172,6 +180,7 @@ const ContextMenu = ({ x, y, onClose, onOpenApp, desktopItemIds }) => {
       ref={ref}
       className="context-menu glass-panel-dark"
       style={{ left: clampedX, top: clampedY }}
+      onMouseDown={(e) => e.stopPropagation()}
     >
       {items.map((item, i) => {
         if (item.separator) {
