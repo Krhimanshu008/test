@@ -1,0 +1,89 @@
+.notepad-app {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: #fff;
+  font-family: 'Inter', sans-serif;
+}
+
+.notepad-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  background: #f3f3f3;
+  border-bottom: 1px solid #e0e0e0;
+  flex-shrink: 0;
+}
+
+.notepad-filename {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #555;
+}
+
+.filename-input {
+  border: 1px solid transparent;
+  border-radius: 4px;
+  padding: 2px 6px;
+  font-size: 13px;
+  font-weight: 500;
+  background: transparent;
+  outline: none;
+  color: #222;
+  transition: all 0.12s;
+  max-width: 200px;
+}
+.filename-input:hover { border-color: #ccc; background: white; }
+.filename-input:focus { border-color: #0067c0; background: white; }
+
+.unsaved-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #e67e22;
+  display: inline-block;
+}
+
+.np-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  background: transparent;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 12px;
+  color: #444;
+  transition: all 0.12s;
+}
+.np-btn:hover { background: #e8e8e8; }
+.np-btn.active { background: rgba(0, 103, 192, 0.1); border-color: rgba(0, 103, 192, 0.3); color: #0067c0; }
+
+.notepad-body {
+  flex: 1;
+  padding: 16px 20px;
+  font-family: 'Cascadia Code', 'Courier New', monospace;
+  font-size: 13px;
+  line-height: 1.7;
+  border: none;
+  outline: none;
+  resize: none;
+  color: #1a1a1a;
+  background: #fff;
+  word-break: break-word;
+}
+
+.notepad-statusbar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 4px 16px;
+  background: #f3f3f3;
+  border-top: 1px solid #e0e0e0;
+  font-size: 11px;
+  color: #888;
+  flex-shrink: 0;
+}

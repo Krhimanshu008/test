@@ -1,0 +1,106 @@
+.window {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+}
+
+.glass-window {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px;
+  overflow: hidden;
+  background: rgba(245, 245, 250, 0.88);
+  backdrop-filter: blur(28px) saturate(180%);
+  -webkit-backdrop-filter: blur(28px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45), 0 0 0 0.5px rgba(255,255,255,0.15) inset;
+  transition: box-shadow 0.2s ease;
+}
+
+.window-focused .glass-window {
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(0, 120, 212, 0.25) inset;
+  border-color: rgba(0, 120, 212, 0.3);
+}
+
+/* ---- Title Bar ---- */
+.window-titlebar {
+  height: 38px;
+  min-height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 8px 0 12px;
+  background: rgba(235, 235, 245, 0.85);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+  cursor: move;
+  user-select: none;
+  flex-shrink: 0;
+}
+
+.titlebar-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.titlebar-icon {
+  display: flex;
+  align-items: center;
+  opacity: 0.9;
+  transform: scale(0.72);
+  transform-origin: left center;
+}
+
+.titlebar-title {
+  font-size: 13px;
+  font-weight: 500;
+  color: #222;
+  letter-spacing: 0.1px;
+}
+
+/* ---- Control Buttons ---- */
+.titlebar-controls {
+  display: flex;
+  gap: 2px;
+}
+
+.ctrl-btn {
+  width: 46px;
+  height: 30px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  color: #333;
+  transition: background 0.12s ease, color 0.12s ease;
+}
+
+.ctrl-btn:hover {
+  background: rgba(0, 0, 0, 0.08);
+}
+
+.ctrl-close:hover {
+  background: #c42b1c;
+  color: #fff;
+}
+
+.ctrl-minimize:hover {
+  background: rgba(0, 0, 0, 0.08);
+}
+
+.ctrl-maximize:hover {
+  background: rgba(0, 0, 0, 0.08);
+}
+
+/* ---- Window Body ---- */
+.window-body {
+  flex: 1;
+  overflow: auto;
+  position: relative;
+  min-height: 0;
+}

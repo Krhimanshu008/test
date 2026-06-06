@@ -1,0 +1,37 @@
+.wallpaper-container {
+  position: absolute;
+  inset: 0;
+  z-index: 0; /* Behind everything */
+  overflow: hidden;
+  pointer-events: none; /* Let clicks pass through if needed, though 3D might need pointer events */
+}
+
+/* We only want pointer events on the 3D canvas so we can interact with it */
+.wallpaper-3d-container {
+  position: absolute;
+  inset: 0;
+  pointer-events: all; 
+}
+
+.wallpaper-gradient {
+  position: absolute;
+  inset: 0;
+  background-size: 400% 400% !important;
+  z-index: -1;
+}
+
+.animated-gradient {
+  animation: gradientShift 10s ease infinite;
+}
+
+.wallpaper-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.wallpaper-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}

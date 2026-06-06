@@ -1,0 +1,131 @@
+.desktop-icon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  border-radius: 8px;
+  cursor: pointer;
+  text-align: center;
+  border: 1px solid transparent;
+  transition: background 0.12s ease, border-color 0.12s ease, transform 0.12s ease;
+  user-select: none;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.desktop-icon:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.15);
+  transform: translateY(-2px);
+}
+
+.desktop-icon:active {
+  transform: scale(0.96);
+}
+
+.desktop-icon.selected {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.3);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+.icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(0 2px 6px rgba(0,0,0,0.35));
+}
+
+.icon-title {
+  color: rgba(255, 255, 255, 0.92);
+  line-height: 1.3;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8), 0 0 8px rgba(0,0,0,0.5);
+  word-break: break-word;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Small icons configuration */
+.desktop-icon.small {
+  width: 70px;
+  height: 72px;
+  padding: 6px 4px 4px;
+  gap: 4px;
+}
+.desktop-icon.small .icon-wrapper {
+  width: 32px;
+  height: 32px;
+}
+.desktop-icon.small .icon-wrapper svg {
+  width: 24px !important;
+  height: 24px !important;
+}
+.desktop-icon.small .icon-title {
+  font-size: 10px;
+  max-width: 64px;
+}
+
+/* Medium icons configuration */
+.desktop-icon.medium {
+  width: 82px;
+  height: 90px;
+  padding: 8px 6px 6px;
+  gap: 5px;
+}
+.desktop-icon.medium .icon-wrapper {
+  width: 44px;
+  height: 44px;
+}
+.desktop-icon.medium .icon-wrapper svg {
+  width: 32px !important;
+  height: 32px !important;
+}
+.desktop-icon.medium .icon-title {
+  font-size: 11px;
+  max-width: 76px;
+}
+
+/* Large icons configuration */
+.desktop-icon.large {
+  width: 100px;
+  height: 110px;
+  padding: 10px 8px 8px;
+  gap: 8px;
+}
+.desktop-icon.large .icon-wrapper {
+  width: 60px;
+  height: 60px;
+}
+.desktop-icon.large .icon-wrapper svg {
+  width: 48px !important;
+  height: 48px !important;
+}
+.desktop-icon.large .icon-title {
+  font-size: 13px;
+  max-width: 92px;
+}
+
+/* Inline rename input */
+.icon-rename-input {
+  width: 90%;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 4px;
+  font-size: 11px;
+  padding: 2px 4px;
+  outline: none;
+  font-family: inherit;
+  margin-top: 2px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+.icon-rename-input::selection {
+  background: #0078d4;
+  color: white;
+}

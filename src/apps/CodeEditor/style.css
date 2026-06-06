@@ -1,0 +1,189 @@
+.code-editor-app {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: #1e1e2e;
+  color: #cdd6f4;
+  font-family: 'Inter', sans-serif;
+}
+
+/* Toolbar */
+.editor-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  background: #181825;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  flex-shrink: 0;
+}
+
+.toolbar-spacer { flex: 1; }
+
+.editor-status {
+  font-size: 11px;
+  color: rgba(255,255,255,0.4);
+  font-family: 'Cascadia Code', monospace;
+  white-space: nowrap;
+}
+
+/* Language selector */
+.lang-selector {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+  color: rgba(255,255,255,0.75);
+  position: relative;
+  user-select: none;
+}
+
+.lang-selector:hover { background: rgba(255,255,255,0.1); }
+
+.lang-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  background: #1e1e2e;
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 8px;
+  overflow: hidden;
+  z-index: 999;
+  min-width: 140px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+}
+
+.lang-dropdown button {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 8px 14px;
+  background: transparent;
+  border: none;
+  color: rgba(255,255,255,0.7);
+  font-size: 12px;
+  cursor: pointer;
+  transition: background 0.12s;
+}
+.lang-dropdown button:hover { background: rgba(255,255,255,0.07); }
+.lang-dropdown button.active {
+  background: rgba(0, 120, 212, 0.25);
+  color: #89b4fa;
+}
+
+/* Toolbar buttons */
+.toolbar-btn {
+  width: 30px;
+  height: 28px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 6px;
+  color: rgba(255,255,255,0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.12s;
+}
+.toolbar-btn:hover { background: rgba(255,255,255,0.1); color: white; }
+.toolbar-btn.danger:hover { background: rgba(231, 76, 60, 0.3); color: #ff7675; }
+
+.run-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 14px;
+  background: #0078d4;
+  border: none;
+  border-radius: 6px;
+  color: white;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.12s;
+}
+.run-btn:hover { background: #106ebe; }
+.run-btn.running { background: #005a9e; opacity: 0.7; cursor: not-allowed; }
+
+/* Editor body — split panes */
+.editor-body {
+  flex: 1;
+  display: flex;
+  min-height: 0;
+}
+
+.editor-pane {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  border-right: 1px solid rgba(255,255,255,0.06);
+}
+
+.editor-loading {
+  padding: 20px;
+  color: rgba(255,255,255,0.4);
+  font-size: 13px;
+}
+
+/* Output pane */
+.output-pane {
+  width: 340px;
+  min-width: 220px;
+  display: flex;
+  flex-direction: column;
+  background: #11111b;
+}
+
+.output-tabs {
+  display: flex;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  flex-shrink: 0;
+}
+
+.output-tabs button {
+  flex: 1;
+  padding: 7px 8px;
+  background: transparent;
+  border: none;
+  color: rgba(255,255,255,0.4);
+  font-size: 11px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  border-bottom: 2px solid transparent;
+  transition: all 0.12s;
+}
+.output-tabs button:hover { color: rgba(255,255,255,0.7); }
+.output-tabs button.active {
+  color: #89b4fa;
+  border-bottom-color: #89b4fa;
+}
+
+.output-console {
+  flex: 1;
+  padding: 14px;
+  overflow-y: auto;
+  font-family: 'Cascadia Code', 'Fira Code', monospace;
+  font-size: 12px;
+  line-height: 1.7;
+  color: #a6e3a1;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.output-placeholder { color: rgba(255,255,255,0.2); }
+
+.preview-frame {
+  flex: 1;
+  border: none;
+  background: white;
+  width: 100%;
+  height: 100%;
+}

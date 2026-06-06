@@ -1,0 +1,187 @@
+.settings-app {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  font-family: 'Inter', sans-serif;
+  background: #f3f3f3;
+  overflow: hidden; /* Prevent full app overflow, handle inside */
+}
+
+/* Sidebar */
+.settings-sidebar {
+  width: 200px;
+  min-width: 200px;
+  background: #ebebeb;
+  border-right: 1px solid #ddd;
+  padding: 24px 0 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  overflow-y: auto;
+}
+
+.settings-avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: #0078d4;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.settings-username {
+  font-size: 13px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-bottom: 20px;
+}
+
+.settings-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 20px;
+  font-size: 13px;
+  color: #333;
+  cursor: pointer;
+  transition: background 0.1s;
+}
+.settings-nav-item:hover { background: rgba(0,0,0,0.06); }
+
+/* Content */
+.settings-content {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  min-width: 0; /* Important to prevent flex items from blowing out container */
+  min-height: 0; /* Important for flex vertical scrolling */
+}
+
+.settings-page-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #111;
+  margin-bottom: 4px;
+}
+
+.settings-section {
+  background: white;
+  border-radius: 12px;
+  border: 1px solid #e0e0e0;
+}
+
+.settings-section-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 20px;
+  border-bottom: 1px solid #ebebeb;
+  background: #fafafa;
+}
+
+.settings-section-header h3 {
+  font-size: 14px;
+  font-weight: 600;
+  color: #222;
+}
+
+.settings-section-body {
+  padding: 20px;
+  overflow-x: auto; /* Allow tables to scroll horizontally if needed */
+}
+
+.settings-desc {
+  font-size: 13px;
+  color: #555;
+  line-height: 1.6;
+  margin-bottom: 14px;
+}
+
+/* Wallpaper grid */
+.wallpaper-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 10px;
+}
+
+.wallpaper-swatch {
+  height: 80px;
+  border-radius: 8px;
+  cursor: pointer;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 8px;
+  border: 2px solid transparent;
+  transition: all 0.15s;
+  overflow: hidden;
+}
+.wallpaper-swatch:hover { transform: scale(1.03); }
+.wallpaper-swatch.active { border-color: #0078d4; }
+
+.swatch-label {
+  font-size: 10px;
+  color: rgba(255,255,255,0.85);
+  font-weight: 500;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+}
+
+.swatch-check {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  font-size: 14px;
+  color: white;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.6);
+}
+
+/* Accent colors */
+.accent-grid {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.accent-dot {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 3px solid transparent;
+  transition: all 0.15s;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+.accent-dot:hover { transform: scale(1.15); border-color: rgba(0,0,0,0.2); }
+
+/* System table */
+.sys-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.sys-label {
+  padding: 7px 0;
+  color: #666;
+  width: 140px;
+  font-weight: 500;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.sys-value {
+  padding: 7px 0;
+  color: #1a1a1a;
+  border-bottom: 1px solid #f0f0f0;
+}
