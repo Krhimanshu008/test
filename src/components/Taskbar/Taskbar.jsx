@@ -198,7 +198,7 @@ const Taskbar = ({ openApps, focusedApp, onAppClick, onOpenApp }) => {
             <span className="ctx-icon">
               {isTaskbarLocked ? <Unlock size={14} /> : <Lock size={14} />}
             </span>
-            {isTaskbarLocked ? 'Unlock Taskbar' : 'Lock Taskbar'}
+            {isTaskbarLocked ? 'Auto-hide Taskbar' : 'Lock Taskbar'}
           </button>
         </div>
       )}

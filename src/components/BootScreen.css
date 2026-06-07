@@ -5,77 +5,75 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #1a1a1a;
-  background-size: cover;
-  background-position: center;
+  background-color: #050505;
   cursor: pointer;
   overflow: hidden;
 }
 
-.boot-overlay {
+.boot-background-gradient {
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.4);
+  background: radial-gradient(circle at center, rgba(255, 255, 255, 0.04) 0%, rgba(0, 0, 0, 0) 60%);
   z-index: 1;
 }
 
-.boot-canvas-container {
+.boot-content {
   position: absolute;
   inset: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 2;
-  pointer-events: none; /* Let clicks pass through to the main container */
+  z-index: 10;
 }
 
-.boot-content.glass-card {
-  position: relative;
-  z-index: 10;
+.boot-logo-wrapper {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.02);
+  box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.02);
+}
+
+.boot-text-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, 60px);
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 16px;
   text-align: center;
-  
-  /* Minimalist Glass Morphism */
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(24px) saturate(150%);
-  -webkit-backdrop-filter: blur(24px) saturate(150%);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.05) inset;
-  border-radius: 24px;
-  padding: 48px 64px;
+}
+
+.boot-logo-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
 }
 
 .boot-title {
-  font-size: 2.5rem;
-  font-weight: 300;
+  font-size: 2.2rem;
+  font-weight: 200;
   color: #ffffff;
-  letter-spacing: 2px;
+  letter-spacing: 4px;
   font-family: 'Inter', sans-serif;
   margin: 0;
 }
 
 .boot-subtitle {
-  font-size: 0.95rem;
-  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.4);
   font-family: 'Inter', sans-serif;
-  letter-spacing: 0.5px;
+  letter-spacing: 3px;
   margin: 0;
   text-transform: uppercase;
-}
-
-.boot-pulse-container {
-  margin-top: 16px;
-  height: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.boot-pulse {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: #ffffff;
+  font-weight: 400;
 }

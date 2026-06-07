@@ -237,7 +237,7 @@ const useOsStore = create((set, get) => ({
   setInteractiveWallpaper: (val) => set({ interactiveWallpaper: val }),
 
   // Taskbar Auto-hide
-  isTaskbarLocked: false,
+  isTaskbarLocked: true,
   toggleTaskbarLock: () => set(state => ({ isTaskbarLocked: !state.isTaskbarLocked })),
 
   // Display Scale

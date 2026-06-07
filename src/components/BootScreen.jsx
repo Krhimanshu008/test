@@ -1,37 +1,6 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
-import { Canvas, useFrame } from '@react-three/fiber';
-import { Float, Wireframe } from '@react-three/drei';
 import './BootScreen.css';
-
-// ----------------------------------------------------------------------------
-// CONFIGURATION
-// You can change this URL to any image you want for the boot screen wallpaper
-// ----------------------------------------------------------------------------
-const BOOT_WALLPAPER_URL = 'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=2564&auto=format&fit=crop';
-
-// A minimalist 3D geometric shape that slowly rotates
-const Minimal3DShape = () => {
-  const meshRef = useRef(null);
-
-  useFrame((state, delta) => {
-    if (meshRef.current) {
-      meshRef.current.rotation.x += delta * 0.2;
-      meshRef.current.rotation.y += delta * 0.3;
-    }
-  });
-
-  return (
-    <Float speed={2} rotationIntensity={0.5} floatIntensity={1}>
-      <mesh ref={meshRef}>
-        <icosahedronGeometry args={[1.5, 0]} />
-        <meshStandardMaterial color="#ffffff" transparent opacity={0.15} />
-        {/* Adds a cool wireframe effect on top of the solid geometry */}
-        <Wireframe stroke={"#ffffff"} thickness={0.02} fillMix={0} />
-      </mesh>
-    </Float>
-  );
-};
 
 const BootScreen = ({ onBoot }) => {
   const handleBoot = async () => {
@@ -49,43 +18,59 @@ const BootScreen = ({ onBoot }) => {
     <motion.div 
       className="boot-screen" 
       onClick={handleBoot}
-      style={{ backgroundImage: `url(${BOOT_WALLPAPER_URL})` }}
       exit={{ opacity: 0 }}
-      transition={{ duration: 1.5, ease: "easeInOut" }}
+      transition={{ duration: 1, ease: "easeInOut" }}
     >
-      <div className="boot-overlay" />
+      <div className="boot-background-gradient" />
 
-      {/* 3D Background Element */}
-      <div className="boot-canvas-container">
-        <Canvas camera={{ position: [0, 0, 5], fov: 45 }}>
-          <ambientLight intensity={1} />
-          <directionalLight position={[10, 10, 5]} intensity={1.5} />
-          <Minimal3DShape />
-        </Canvas>
-      </div>
-
-      {/* Glass Content Card */}
-      <motion.div 
-        className="boot-content glass-card"
-        initial={{ opacity: 0, y: 20, scale: 0.95 }}
-        animate={{ opacity: 1, y: 0, scale: 1 }}
-        transition={{ duration: 0.8, ease: "easeOut" }}
-      >
-        <h1 className="boot-title">Browser OS</h1>
-        
-        <p className="boot-subtitle">
-          Click anywhere to start
-        </p>
-
-        {/* Minimalist pulsing indicator */}
-        <div className="boot-pulse-container">
-          <motion.div
-            className="boot-pulse"
-            animate={{ scale: [1, 1.5, 1], opacity: [0.3, 1, 0.3] }}
-            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+      {/* Modern Minimal Content */}
+      <div className="boot-content">
+        <motion.div 
+          className="boot-logo-wrapper"
+          initial={{ opacity: 0, scale: 0.8, x: "-50%", y: "-50%" }}
+          animate={{ opacity: 1, scale: 1, x: "-50%", y: "-50%" }}
+          transition={{ duration: 1, ease: "easeOut", delay: 0.2 }}
+          exit={{ 
+            scale: 60, 
+            opacity: 0, 
+            x: "-50%", 
+            y: "-50%",
+            backgroundColor: 'rgba(255, 255, 255, 0.1)',
+            transition: { duration: 1, ease: "easeInOut", delay: 0 }
+          }}
+        >
+          <motion.div 
+            className="boot-logo-dot"
+            animate={{ scale: [1, 1.2, 1], opacity: [0.8, 1, 0.8] }}
+            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+            exit={{ scale: 0, opacity: 0, transition: { duration: 0.5 } }}
           />
-        </div>
-      </motion.div>
+        </motion.div>
+
+        <motion.div 
+          className="boot-text-container"
+          initial={{ opacity: 0, y: 10, x: "-50%" }}
+          animate={{ opacity: 1, y: 0, x: "-50%" }}
+          transition={{ duration: 1, ease: "easeOut", delay: 0.4 }}
+          exit={{ 
+            opacity: 0, 
+            y: 10, 
+            x: "-50%",
+            scale: 0.9,
+            transition: { duration: 0.5, ease: "easeOut", delay: 0 }
+          }}
+          style={{ top: 'calc(50% + 60px)' }}
+        >
+          <h1 className="boot-title">Web OS</h1>
+          <motion.p 
+            className="boot-subtitle"
+            animate={{ opacity: [0.4, 0.8, 0.4] }}
+            transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+          >
+            Click to start
+          </motion.p>
+        </motion.div>
+      </div>
     </motion.div>
   );
 };
