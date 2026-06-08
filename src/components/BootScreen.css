@@ -77,3 +77,15 @@
   text-transform: uppercase;
   font-weight: 400;
 }
+
+.boot-warning {
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.35);
+  font-family: 'Inter', sans-serif;
+  letter-spacing: 1px;
+  margin-top: 12px;
+  max-width: 250px;
+  text-align: center;
+  font-weight: 300;
+  line-height: 1.4;
+}

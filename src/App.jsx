@@ -99,10 +99,8 @@ function App() {
 
   // Initial setup and input trapping
   useEffect(() => {
-    // Initial arrange icons if not set
-    if (Object.keys(useOsStore.getState().iconPositions).length === 0) {
-      useOsStore.getState().arrangeIcons(allDesktopItems.map(a => a.id));
-    }
+    // Auto arrange icons on load
+    useOsStore.getState().arrangeIcons(allDesktopItems.map(a => a.id));
 
     if (!isBooted) return;
     const handleContextMenu = (e) => e.preventDefault();

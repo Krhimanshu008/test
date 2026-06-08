@@ -7,24 +7,52 @@ import './style.css';
 const DEFAULT_TIMELINE = [
   {
     id: 1,
+    year: 'Oct 2025 - Present',
+    title: 'Business Operations Specialist at Elcom Digital Solutions',
+    desc: 'Overseeing full-cycle financial operations, monthly reconciliations, management reporting, and spearheading process automation initiatives.',
+    category: 'Work'
+  },
+  {
+    id: 2,
+    year: 'Jul 2023 - Jul 2025',
+    title: 'Senior Associate at Anjali Jain & Associates',
+    desc: 'Managed statutory audits for 15+ corporate clients, conducted tax audits, prepared financial statements, and built internal control systems.',
+    category: 'Work'
+  },
+  {
+    id: 3,
+    year: 'Oct 2022 - Jul 2023',
+    title: 'Associate at Ram S Chopra & Associates',
+    desc: 'Coordinated MCA filings and TDS returns for 20+ clients, conducted financial audits, and managed IP modifications.',
+    category: 'Work'
+  },
+  {
+    id: 4,
+    year: 'Aug 2020 - Oct 2022',
+    title: 'Junior Associate at Anjali Jain & Associates',
+    desc: 'Assisted in stock audits for high-profile clients, supported statutory audits, and managed bookkeeping responsibilities.',
+    category: 'Work'
+  },
+  {
+    id: 5,
     year: 'Present',
     title: 'Tech & Automation Builder',
     desc: 'Building tools with Python, JS, RAG, and COMFYUI to automate repetitive parts of finance work.',
     category: 'Tech'
   },
   {
-    id: 2,
-    year: 'Present',
-    title: 'Chartered Accountancy Journey',
-    desc: 'Currently pursuing CA (Group 1 Cleared), mastering the intricacies of corporate finance and law.',
+    id: 6,
+    year: 'In Progress',
+    title: 'CA Intermediate — Group 1 Cleared',
+    desc: 'Institute of Chartered Accountants of India (ICAI)',
     category: 'Education'
   },
   {
-    id: 3,
-    year: 'Past 5 Years',
-    title: 'Finance Professional',
-    desc: 'Worked across CA firms and industry. Handled accounting, statutory/tax/bank audits, budgeting, MIS reporting, and cost analysis.',
-    category: 'Work'
+    id: 7,
+    year: '2022',
+    title: 'Bachelor of Commerce (B.Com)',
+    desc: 'CCS University, India',
+    category: 'Education'
   }
 ];
 
@@ -122,14 +150,17 @@ const AboutMe = () => {
           <div className="skills-chips">
             <span className="skill-chip">Statutory & Tax Audits</span>
             <span className="skill-chip">GST & Income Tax</span>
-            <span className="skill-chip">MIS Reporting</span>
-            <span className="skill-chip">Corporate Law</span>
+            <span className="skill-chip">Budgeting & MIS</span>
+            <span className="skill-chip">Corporate & MCA Compliance</span>
+            <span className="skill-chip">IP Rights</span>
+            <span className="skill-chip">Tally/Zoho/Xero</span>
           </div>
 
           <h3 style={{ marginTop: '16px' }}>Tech Skills</h3>
           <div className="skills-chips">
             <span className="skill-chip">Python</span>
             <span className="skill-chip">JavaScript</span>
+            <span className="skill-chip">HTML/CSS</span>
             <span className="skill-chip">SQL</span>
             <span className="skill-chip">RAG</span>
             <span className="skill-chip">COMFYUI</span>
@@ -154,7 +185,9 @@ const AboutMe = () => {
           </motion.h1>
           <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }}>
             I'm a finance professional who genuinely enjoys the detail work — whether that's untangling a messy ledger, 
-            navigating a statutory audit, or building a cleaner compliance process. Here is a timeline of my milestones.
+            navigating a statutory audit, or building a cleaner compliance process. With 5+ years across CA firms and 
+            industry, I've worked across accounting, auditing, taxation, budgeting, MIS reporting, and cost analysis. 
+            I'm currently pursuing CA and have a parallel interest in tech — I build tools to automate the repetitive parts of finance work.
           </motion.p>
         </div>
 

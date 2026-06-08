@@ -69,6 +69,14 @@ const BootScreen = ({ onBoot }) => {
           >
             Click to start
           </motion.p>
+          <motion.p
+            className="boot-warning"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.8, duration: 1.5, ease: "easeOut" }}
+          >
+            This Web OS is under development and many apps may not work.
+          </motion.p>
         </motion.div>
       </div>
     </motion.div>
