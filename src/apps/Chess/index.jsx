@@ -35,7 +35,7 @@ function parseLichessPuzzle(data) {
 
   return {
     game: board,
-    playerColor: board.turn() === 'w' ? 'white' : 'black',
+    playerColor: board.turn() === 'w' ? 'black' : 'white',
     solution: puzzle.solution,
     rating: puzzle.rating,
     themes: puzzle.themes || [],
@@ -175,9 +175,31 @@ function usePuzzle() {
       const data = await fetchLichessPuzzle(type);
       const p    = parseLichessPuzzle(data);
       setParsed(p);
-      setGame(new Chess(p.game.fen()));
+      
+      const initialGame = new Chess(p.game.fen());
+      setGame(initialGame);
       setMoveIdx(0);
       _setStatus('playing');
+      setEngineOn(true); // Lock board while opponent makes the first move
+
+      // Auto-play the opponent's forcing move
+      setTimeout(() => {
+        const copy = new Chess(initialGame.fen());
+        const opUci = p.solution[0];
+        copy.move(uciToObj(opUci));
+        setGame(copy);
+        setFeedbackSqs({
+          [opUci.slice(0, 2)]: { backgroundColor: 'rgba(96, 165, 250, 0.35)' },
+          [opUci.slice(2, 4)]: { backgroundColor: 'rgba(96, 165, 250, 0.45)' },
+        });
+        
+        setTimeout(() => {
+          setFeedbackSqs({});
+          setEngineOn(false); // Unlock board for player
+          setMoveIdx(1);      // User's first move is now at index 1
+        }, 700);
+      }, 500);
+
     } catch (e) {
       setError(e.message);
       _setStatus('error');
@@ -603,16 +625,27 @@ function PuzzleRushMode() {
             {statusMsg[pz.status] || ''}
           </div>
 
-          <div className="glass-panel" style={{ flex: 'none' }}>
-            <div className="rush-stats">
-              <div className="stat-box">
-                <div className="stat-label">SCORE</div>
-                <div className={`stat-val ${pz.status === 'complete' ? 'pulse-green' : ''}`}>{score}</div>
+          {/* Timer */}
+          <div className="glass-panel timer-panel">
+            <div className={`timer-number ${danger ? 'danger' : ''}`}>
+              {timeLeft}<span className="timer-suffix">s</span>
+            </div>
+            <div className="timer-bar">
+              <div className={`timer-fill ${danger ? 'danger' : ''}`} style={{ width: `${pct}%` }} />
+            </div>
+          </div>
+
+          {/* Score */}
+          <div className="glass-panel">
+            <div className="score-row">
+              <div className="score-item">
+                <div className="score-label">Score</div>
+                <div className="score-num">{score}</div>
               </div>
-              <div className="stat-line" />
-              <div className="stat-box">
-                <div className="stat-label">BEST</div>
-                <div className="stat-val gold">{bestScore}</div>
+              <div className="score-divider" />
+              <div className="score-item">
+                <div className="score-label">Best</div>
+                <div className="score-num best">{bestScore}</div>
               </div>
             </div>
           </div>
